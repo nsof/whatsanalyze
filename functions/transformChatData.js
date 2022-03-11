@@ -64,6 +64,15 @@ export class Chat {
     );
     message_string = message_string.replace(/\u200E/gi, "");
     let message_array = message_string.replace(/\n/g, " ").split(" ");
+
+    //remove initial 'ו' in hebrew words. this wrong as some words actually do start with 'ו'
+    message_array.forEach((e) => {
+      if (e[0] === "ו") e = e.slice(1);
+    });
+
+    //filter short words from the list
+    message_array = message_array.filter((word) => word.length > 1);
+
     let distribution = {};
     message_array.map(function (item) {
       distribution[item] = (distribution[item] || 0) + 1;
@@ -441,6 +450,14 @@ export class Chat {
               "_omitted",
               "_weggelassen",
               "_attached",
+              "╬═╬",
+              "message",
+              "deleted",
+              "missed",
+              "attached)",
+              "͡°",
+              "͜ʖ",
+              "location:",
             ].includes(word[0].toLowerCase())
           )
       )
