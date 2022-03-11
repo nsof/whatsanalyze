@@ -5,11 +5,9 @@ import Sentry from "@nuxtjs/sentry";
 
 // eslint-disable-next-line no-undef
 const local = process.env.NUXT_ENV_LOCAL !== undefined;
-const baseUrl = // eslint-disable-next-line no-undef
-(process.env.BASE_URL || "https://www.whatsanalyze.com").replace(
-  "http:",
-  "https:"
-);
+const baseUrl = ( // eslint-disable-next-line no-undef
+  process.env.BASE_URL || "https://www.whatsanalyze.com"
+).replace("http:", "https:");
 
 export default {
   publicRuntimeConfig: {
@@ -190,6 +188,7 @@ export default {
   },
   gtm: {
     id: "GTM-W32PNH3",
+    enabled: false,
   },
   sentry: {
     dsn:
@@ -236,6 +235,7 @@ export default {
       // Sets webpack's mode to development if `isDev` is true.
       if (isDev) {
         config.mode = "development";
+        config.devtool = isClient ? "source-map" : "inline-source-map";
       } else if (isClient) {
         config.devtool = "hidden-source-map";
       }
