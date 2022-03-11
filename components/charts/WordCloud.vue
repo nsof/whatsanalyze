@@ -5,7 +5,7 @@
 <script>
 import { Chat } from "~/functions/transformChatData";
 
-import stopwords from "stopwords-de";
+import stopwords from "stopwords-iso";
 
 export default {
   name: "WordCloud",
@@ -24,7 +24,7 @@ export default {
       default: 0.1,
     },
     stopWords: {
-      type: Array,
+      type: Object,
       default: () => stopwords,
     },
   },
@@ -33,11 +33,6 @@ export default {
       chart: null,
       series: null,
     };
-  },
-  methods: {
-    updateGraph() {
-      this.chartdata.getAllWords().then((x) => (this.series.data = x));
-    },
   },
   watch: {
     chartdata: {
@@ -67,6 +62,11 @@ export default {
   },
   beforeDestroy: function () {
     this.chart.dispose();
+  },
+  methods: {
+    updateGraph() {
+      this.chartdata.getAllWords().then((x) => (this.series.data = x));
+    },
   },
 };
 </script>

@@ -1,6 +1,7 @@
 import { chatColors, hexToRgbA } from "~/functions/colors";
-import stopwords_de from "stopwords-de";
-import stopwords from "stopwords-en";
+import stopwords from "stopwords-iso";
+// import stopwords_de from "stopwords-de";
+// import stopwords_en from "stopwords-en";
 import { onlyEmoji } from "emoji-aware";
 import * as moment from "moment";
 
@@ -413,9 +414,10 @@ export class Chat {
     return this.sortedFreqDict
       .filter(
         (word) =>
+          word[1] > 1 &&
           !(
-            stopwords_de.includes(word[0].toLowerCase()) ||
-            stopwords.includes(word[0].toLowerCase()) ||
+            stopwords.en.includes(word[0].toLowerCase()) ||
+            stopwords.he.includes(word[0].toLowerCase()) ||
             [
               "",
               "ich",
@@ -440,7 +442,7 @@ export class Chat {
               "_weggelassen",
               "_attached",
             ].includes(word[0].toLowerCase())
-          ) && word[1] > 1
+          )
       )
       .map((word) => {
         return { word: word[0], freq: word[1] };
