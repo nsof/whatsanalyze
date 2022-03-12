@@ -7,10 +7,28 @@ import * as moment from "moment";
 
 export class Chat {
   static removeSystemMessages(chatObject) {
-    // remove the first message with slice ("this chat is encrypted") and all system messages via the filter.
-    return chatObject
-      .filter((message) => message.author.toLowerCase() !== "system")
-      .slice(1);
+    // all system messages via the filter.
+    let FilteredChatObject = chatObject.filter(
+      (chatItem) => chatItem.author.toLowerCase() !== "system"
+    );
+
+    // remove all some chat data we do not want to process
+    const chatMessagesToFilter = [
+      "Missed voice call",
+      "<Media omitted>",
+      "location:",
+      "This message was deleted",
+      "vcf (file attached)",
+    ];
+
+    FilteredChatObject = FilteredChatObject.filter(
+      (chatItem) =>
+        !chatMessagesToFilter.some((str) => chatItem.message.includes(str))
+    );
+
+    // "Missed voice call"
+
+    return FilteredChatObject;
   }
 
   static groupBy(chatObject, key) {
@@ -125,6 +143,7 @@ export class Chat {
     this._maxWordsWordCloud = maxWordsWordCloud;
     // here we remove messages (i.e. system messages)
     this.filterdChatObject = Chat.removeSystemMessages(this.chatObject);
+
     //number of persons in chat
     const messagesTemp = Object.entries(
       Chat.getMessagesPerPerson(this.filterdChatObject)
@@ -451,13 +470,8 @@ export class Chat {
               "_weggelassen",
               "_attached",
               "╬═╬",
-              "message",
-              "deleted",
-              "missed",
-              "attached)",
               "͡°",
               "͜ʖ",
-              "location:",
             ].includes(word[0].toLowerCase())
           )
       )
