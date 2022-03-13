@@ -5,30 +5,45 @@ import stopwords from "stopwords-iso";
 import { onlyEmoji } from "emoji-aware";
 import * as moment from "moment";
 
+const emojiRegEx = /(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])/gi;
+
 export class Chat {
   static removeSystemMessages(chatObject) {
     // all system messages via the filter.
-    let FilteredChatObject = chatObject.filter(
+    return chatObject.filter(
       (chatItem) => chatItem.author.toLowerCase() !== "system"
     );
+  }
 
-    // remove all some chat data we do not want to process
+  static removeUserSystemMessages(chatItems) {
+    // remove all chat data we do not want to process
     const chatMessagesToFilter = [
       "Missed voice call",
+      "Missed video call",
       "<Media omitted>",
       "location:",
       "This message was deleted",
-      "vcf (file attached)",
+      "You deleted this message",
+      "file attached",
     ];
 
-    FilteredChatObject = FilteredChatObject.filter(
+    return chatItems.filter(
       (chatItem) =>
         !chatMessagesToFilter.some((str) => chatItem.message.includes(str))
     );
+  }
 
-    // "Missed voice call"
+  static removeWeirdMessages(chatItems) {
+    // if its too long it was probably created and then forwarded by a very bored individual
+    return chatItems.filter((chatItem) => chatItem.message.length <= 256);
+  }
 
-    return FilteredChatObject;
+  static removeUninterestingMessages(chatItems) {
+    let filteredChatObject = chatItems;
+    filteredChatObject = Chat.removeSystemMessages(filteredChatObject);
+    filteredChatObject = Chat.removeUserSystemMessages(filteredChatObject);
+    filteredChatObject = Chat.removeWeirdMessages(filteredChatObject);
+    return filteredChatObject;
   }
 
   static groupBy(chatObject, key) {
@@ -55,7 +70,7 @@ export class Chat {
 
   static match_emojys(chat_distribution, terminationCondition = 3) {
     let mostUsedEmojis = new Set();
-    const regexpEmojiPresentation = /\p{Emoji_Presentation}/gu;
+    const regexpEmojiPresentation = emojiRegEx; // /\p{Emoji_Presentation}/gu;
     for (let entry of chat_distribution) {
       if (mostUsedEmojis.size === terminationCondition) {
         return mostUsedEmojis;
@@ -83,16 +98,28 @@ export class Chat {
     message_string = message_string.replace(/\u200E/gi, "");
     let message_array = message_string.replace(/\n/g, " ").split(" ");
 
-    //remove initial 'ו' in hebrew words. this wrong as some words actually do start with 'ו'
+    //remove initial 'ו' in hebrew words. this could be wrong as some words actually do start with 'ו' but more often than not - its ok.
     message_array.forEach((e) => {
       if (e[0] === "ו") e = e.slice(1);
     });
 
-    //filter short words from the list
-    message_array = message_array.filter((word) => word.length > 1);
+    //filter short or too long words ( <= 1 => 15) words from the list
+    message_array = message_array.filter(
+      (word) => word.length > 1 && word.length < 15
+    );
+
+    //split emojis
+    let message_array_with_split_emojis = [];
+    message_array.forEach((item) => {
+      let splits = item.split(emojiRegEx);
+      splits = splits.filter((splitItem) => splitItem.length > 0);
+      message_array_with_split_emojis = message_array_with_split_emojis.concat(
+        splits
+      );
+    });
 
     let distribution = {};
-    message_array.map(function (item) {
+    message_array_with_split_emojis.map(function (item) {
       distribution[item] = (distribution[item] || 0) + 1;
     });
     let sorted_distribution = Object.entries(distribution).sort(
@@ -142,7 +169,7 @@ export class Chat {
     // max number of words shown in word cloud
     this._maxWordsWordCloud = maxWordsWordCloud;
     // here we remove messages (i.e. system messages)
-    this.filterdChatObject = Chat.removeSystemMessages(this.chatObject);
+    this.filterdChatObject = Chat.removeUninterestingMessages(this.chatObject);
 
     //number of persons in chat
     const messagesTemp = Object.entries(
@@ -178,7 +205,7 @@ export class Chat {
 
   get sortedFreqDict() {
     if (this._sortedFreqList) return this._sortedFreqList;
-    this._sortedFreqList = Chat.createSortedFreqDict(this.chatObject);
+    this._sortedFreqList = Chat.createSortedFreqDict(this.filterdChatObject);
     return this._sortedFreqList;
   }
 
@@ -469,9 +496,6 @@ export class Chat {
               "_omitted",
               "_weggelassen",
               "_attached",
-              "╬═╬",
-              "͡°",
-              "͜ʖ",
             ].includes(word[0].toLowerCase())
           )
       )
