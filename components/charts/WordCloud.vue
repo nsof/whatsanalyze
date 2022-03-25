@@ -21,7 +21,7 @@ export default {
     },
     randomness: {
       type: Number,
-      default: 0.1,
+      default: 0.0,
     },
     stopWords: {
       type: Object,

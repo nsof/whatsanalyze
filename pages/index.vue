@@ -2,74 +2,37 @@
   <div>
     <div ref="aboveTheFold" class="top-color" style="overflow-y: hidden">
       <v-container>
-        <v-row v-if="$vuetify.breakpoint.mdAndUp"
-               :style="isShowingChats ? 'height: fit-content' : 'height: 70vh; min-height:504px;'"
-               class="center-content"
-               no-gutters
+        <v-row
+          v-if="$vuetify.breakpoint.mdAndUp"
+          :style="
+            isShowingChats
+              ? 'height: fit-content'
+              : 'height: 70vh; min-height:504px;'
+          "
+          class="center-content"
+          no-gutters
         >
           <v-col
             :md="isShowingChats ? 9 : 6"
             class="px-0 px-md-16 pb-8"
             cols="12"
           >
-            <v-row :style="isShowingChats ? 'height: fit-content' : 'height: 45vh;'"
-                   class="center-content"
+            <v-row
+              :style="isShowingChats ? 'height: fit-content' : 'height: 25vh;'"
+              class="center-content filehandler"
             >
-              <HeaderCta />
-              <ArrowDown :animate="true" />
-            </v-row>
-            <v-row :style="isShowingChats ? 'height: fit-content' : 'height: 25vh;'"
-                   class="center-content filehandler">
               <FileHandler
-                :style="isShowingChats? 'max-width: 800px' : ''"
+                :style="isShowingChats ? 'max-width: 800px' : ''"
                 class=""
-                style="align-self:end; width: 100%"
+                style="align-self: end; width: 100%"
                 @hide_explanation="isShowingChats = $event"
                 @new_messages="newMessages"
               />
             </v-row>
           </v-col>
-          <v-col v-if="!isShowingChats" cols="12" md="6">
-            <ChartsExampleGraphs :chat_="chat" />
-          </v-col>
-        </v-row>
-        <v-row v-if="$vuetify.breakpoint.smAndDown" no-gutters>
-          <v-col class="px-0 pb-1 my-auto" cols="12">
-            <HeaderCta />
-          </v-col>
-          <v-col cols="12">
-            <ArrowDown :animate="true" style="width: 100%; overflow: hidden" />
-          </v-col>
-          <v-col class="pt-0">
-            <FileHandler
-              class="filehandler"
-              @hide_explanation="isShowingChats = $event"
-              @new_messages="newMessages"
-            />
-          </v-col>
-          <v-col v-if="!isShowingChats" cols="12" md="6">
-            <ChartsExampleGraphs :chat_="chat" />
-          </v-col>
         </v-row>
       </v-container>
     </div>
-    <v-row v-if="$vuetify.breakpoint.mdAndUp" no-gutters style="height: 10vh; justify-content: center;">
-      <ArrowDown :animate="true" />
-    </v-row>
-    <TrustLogos v-if="!isShowingChats" />
-    <v-container v-show="!isShowingChats" class="pt-md-16">
-      <ExportExplainer class="exportexplainer" />
-      <Cta show-image />
-      <Faq />
-      <Testimonials />
-      <About />
-      <PdfExample />
-      <Cta
-        button-txt="generateYourChatPDF"
-        text="getChatBeautiful"
-        title="getFreePDFPreview"
-      />
-    </v-container>
 
     <v-container v-if="isShowingChats">
       <ChartsResults ref="results" :attachments="attachments" :chat="chat" />
@@ -79,15 +42,19 @@
 
 <script>
 import { Chat } from "~/functions/transformChatData";
-import { GTAG_INTERACTION, GTAG_LEAD, GTAG_NUM_PERSONS, gtagEvent } from "~/functions/gtagValues";
+import {
+  GTAG_INTERACTION,
+  GTAG_LEAD,
+  GTAG_NUM_PERSONS,
+  gtagEvent,
+} from "~/functions/gtagValues";
 import debounce from "lodash/debounce";
-
 
 export default {
   async asyncData({ $content }) {
     const page = await $content("home").fetch();
     return {
-      page
+      page,
     };
   },
   data() {
@@ -95,7 +62,7 @@ export default {
       isShowingChats: false,
       chat: undefined,
       attachments: undefined,
-      loading: false
+      loading: false,
     };
   },
   head() {
@@ -106,35 +73,35 @@ export default {
           hid: "og:title",
           name: "og:title",
           property: "og:title",
-          content: "WhatsAnalyze - The WhatsApp Chat Analyzer"
+          content: "WhatsAnalyze - The WhatsApp Chat Analyzer",
         },
         {
           hid: "og:site_name",
           name: "og:site_name",
           property: "og:site_name",
-          content: "WhatsAnalyze - The WhatsApp Chat Analyzer"
+          content: "WhatsAnalyze - The WhatsApp Chat Analyzer",
         },
         {
           hid: "description",
           name: "description",
           property: "description",
           content:
-            "America's Most Popular WhatsApp Analyzer ✓ Now offering Group chats ✓ Reveal your friends character ✓ No Chat Data is sent to a Server. Get Started now!"
+            "America's Most Popular WhatsApp Analyzer ✓ Now offering Group chats ✓ Reveal your friends character ✓ No Chat Data is sent to a Server. Get Started now!",
         },
         {
           hid: "og:description",
           name: "og:description",
           property: "og:description",
           content:
-            "America's Most Popular WhatsApp Analyzer ✓ Now offering Group chats ✓ Reveal your friends character ✓ No Chat Data is sent to a Server. Get Started now!"
+            "America's Most Popular WhatsApp Analyzer ✓ Now offering Group chats ✓ Reveal your friends character ✓ No Chat Data is sent to a Server. Get Started now!",
         },
         {
           hid: "og:url",
           name: "og:url",
           property: "og:url",
-          content: "whatsanalyze.com"
-        }
-      ]
+          content: "whatsanalyze.com",
+        },
+      ],
     };
   },
   created() {
@@ -178,8 +145,8 @@ export default {
     handleScroll() {
       // Any code to be executed when the window is scrolled
       this.$refs.aboveTheFold.scrollTop = window.scrollY;
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -267,5 +234,4 @@ export default {
 .center-content {
   justify-content: center;
 }
-
 </style>

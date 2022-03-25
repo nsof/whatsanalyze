@@ -2,23 +2,11 @@
   <div v-if="chat" class="text-center">
     <div id="download-graphs">
       <GlobalHeader class="only-visible-to-html2canvas" />
-      <DownloadPopup
-        :chat="chat"
-        isSimple
-        class="my-5"
-        data-html2canvas-ignore
-        remove-height-in-html2-canvas
-      />
       <div class="text-h2 font-weight-bold pb-10">Chat Timeline</div>
       <div>Messages per Day</div>
       <Share id="chat-timeline">
         <ChartsLineChart :chartdata="chat" />
       </Share>
-      <DownloadPopup
-        :chat="chat"
-        data-html2canvas-ignore
-        remove-height-in-html2-canvas
-      />
       <Share :use-html2-canvas="true">
         <ChartsFunFacts
           :chartdata="chat"
@@ -49,7 +37,7 @@
           <Share id="messages-per-time-of-day">
             <ChartsBarChart
               :chartdata="chat"
-              dataGrouping="hourly"
+              data-grouping="hourly"
               class="py-10"
             />
           </Share>
@@ -62,7 +50,7 @@
           <Share id="radar-month">
             <ChartsRadarChart
               :chartdata="chat"
-              dataGrouping="weekly"
+              data-grouping="weekly"
               class="py-10"
             />
           </Share>
@@ -72,7 +60,7 @@
           <Share id="radar-day">
             <ChartsRadarChart
               :chartdata="chat"
-              dataGrouping="daily"
+              data-grouping="daily"
               class="py-10"
             />
           </Share>
@@ -80,20 +68,12 @@
       </v-row>
 
       <div class="text-h3 font-weight-bold pt-10">Word Cloud</div>
-      <ChartsWordCloud id="wordcloud" :chartdata="chat" class="px-10" />
-
-      <DownloadPopup
-        :chat="chat"
-        data-html2canvas-ignore
-        remove-height-in-html2-canvas
-      />
-
-      <ChatVisualization
-        data-html2canvas-ignore
-        remove-height-in-html2-canvas
-        :chat="chat"
-        :attachments="attachments"
-        :results="this"
+      <ChartsWordCloud
+        id="wordcloud"
+        :chartdata="chat"
+        :min-word-length="30"
+        style="height: 400px; width: 800px"
+        class="pa-0 ma-0"
       />
 
       <GlobalFooter class="only-visible-to-html2canvas" />
