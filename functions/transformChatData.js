@@ -160,6 +160,18 @@ export class Chat {
     return hours;
   }
 
+  static removeSomeAuthors(chatItems) {
+    return chatItems.filter(
+      (chatItem) =>
+        ![
+          "דבורה כהן",
+          "+972 54-330-4744",
+          "יערה אדרי-שמעוני",
+          "מיכל טנא",
+        ].includes(chatItem.author.toLowerCase())
+    );
+  }
+
   constructor(chatObject = [], groupAfter = 9, maxWordsWordCloud = 150) {
     // this one is the complete input
     this.chatObject = chatObject;
@@ -170,11 +182,13 @@ export class Chat {
     this._maxWordsWordCloud = maxWordsWordCloud;
     // here we remove messages (i.e. system messages)
     this.filterdChatObject = Chat.removeUninterestingMessages(this.chatObject);
+    this.filterdChatObject = Chat.removeSomeAuthors(this.filterdChatObject);
 
     //number of persons in chat
-    const messagesTemp = Object.entries(
+    var messagesTemp = Object.entries(
       Chat.getMessagesPerPerson(this.filterdChatObject)
     );
+
     this.numPersonsInChat = messagesTemp.length;
     // All persons
     this.personColorMap = {};

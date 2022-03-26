@@ -7,21 +7,15 @@
         remove-height-in-html2-canvas
       />
 
+      <div class="text-h3 font-weight-bold py-10">Summary</div>
+
       <ChartsTextStats :chat="chat" />
 
-      <div class="text-h2 font-weight-bold py-10">Chat Timeline</div>
+      <div class="text-h3 font-weight-bold py-10">Chat Timeline</div>
 
-      <div>Messages per Day</div>
+      <div class="text-h5">Messages per Day</div>
       <Share id="chat-timeline">
         <ChartsLineChart :chartdata="chat" />
-      </Share>
-      <Share :use-html2-canvas="true">
-        <ChartsFunFacts
-          :chartdata="chat"
-          class="pb-md-10"
-          data-html2canvas-ignore
-          remove-height-in-html2-canvas
-        />
       </Share>
 
       <GroupOthers
@@ -29,6 +23,10 @@
         data-html2canvas-ignore
         remove-height-in-html2-canvas
       />
+
+      <Share :use-html2-canvas="true">
+        <ChartsFunFacts :chartdata="chat" class="pb-md-10" />
+      </Share>
       <!-- Make dropdown -> messages or words -->
       <div class="text-h3 font-weight-bold py-10">Messages per</div>
       <v-row>
