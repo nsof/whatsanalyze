@@ -6,7 +6,11 @@
         data-html2canvas-ignore
         remove-height-in-html2-canvas
       />
+
+      <ChartsTextStats :chat="chat" />
+
       <div class="text-h2 font-weight-bold py-10">Chat Timeline</div>
+
       <div>Messages per Day</div>
       <Share id="chat-timeline">
         <ChartsLineChart :chartdata="chat" />
@@ -19,8 +23,6 @@
           remove-height-in-html2-canvas
         />
       </Share>
-
-      <ChartsTextStats :chat="chat" />
 
       <GroupOthers
         :chat-object="chat"

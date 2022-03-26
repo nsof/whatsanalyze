@@ -1,25 +1,5 @@
 <template>
   <v-container class="px-6">
-    <!-- First and last contact -->
-
-    <v-row class="my-7 text-left">
-      <v-col cols="12" class="text-h5 text-md-h4 font-weight-bold pa-0"
-        >{{ $t("firstMessage") }}
-      </v-col>
-      <div class="font-weight-bold text-h3 text-md-h2">
-        {{ firstDateString }}
-      </div>
-    </v-row>
-
-    <v-row class="my-7 text-right">
-      <div class="text-md-h2 text-h3 font-weight-bold ml-auto">
-        {{ lastDateString }}
-      </div>
-      <v-col cols="12" class="text-h5 text-md-h4 font-weight-bold pa-0"
-        >{{ $t("lastMessage") }}
-      </v-col>
-    </v-row>
-
     <!-- Days you are chatting -->
     <v-row class="white--text">
       <v-col class="cyan darken-2 fact-box py-10" cols="12" sm="6">
@@ -78,7 +58,7 @@
 
     <!-- Total message count -->
 
-    <!-- Most acrive day -->
+    <!-- Most active day -->
 
     <!-- Total Word count -->
 
@@ -96,6 +76,9 @@ import {
 
 export default {
   props: ["chat"],
+  data() {
+    return {};
+  },
   computed: {
     lastDateString() {
       return getDateString(this.lastDate, false);
@@ -115,9 +98,6 @@ export default {
     totalMessages() {
       return this.chat.chatObject.length;
     },
-  },
-  data() {
-    return {};
   },
   methods: {},
 };
