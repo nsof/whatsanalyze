@@ -306,6 +306,7 @@ export class Chat {
       return {
         color: person.color,
         name: name,
+        numberOfmessages: person.messages.length,
         numberOfWords: numberOfWords,
         longestMessage: longestMessage,
         uniqueWords: uniqueWords,

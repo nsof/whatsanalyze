@@ -12,6 +12,13 @@
 
       <div class="text-left mt-8">
         <div>
+          <v-icon :color="person.color">mdi-message-text</v-icon>
+
+          {{ $t("totalMessages") }} <b>{{ person.numberOfmessages }}</b>
+        </div>
+
+        <br />
+        <div>
           <v-icon :color="person.color">mdi-book</v-icon>
 
           {{ $t("totalWords") }} <b>{{ person.numberOfWords }}</b>
@@ -58,16 +65,11 @@
 
 <script>
 export default {
+  props: ["chartdata"],
   data() {
     return {
       data: [],
     };
-  },
-  props: ["chartdata"],
-  methods: {
-    updateGraph() {
-      this.chartdata.getFunFacts().then((funFacts) => (this.data = funFacts));
-    },
   },
   watch: {
     chartdata: {
@@ -79,6 +81,11 @@ export default {
   },
   mounted() {
     this.updateGraph();
+  },
+  methods: {
+    updateGraph() {
+      this.chartdata.getFunFacts().then((funFacts) => (this.data = funFacts));
+    },
   },
 };
 </script>
