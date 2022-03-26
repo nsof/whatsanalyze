@@ -1,8 +1,12 @@
 <template>
   <div v-if="chat" class="text-center">
     <div id="download-graphs">
-      <GlobalHeader class="only-visible-to-html2canvas" />
-      <div class="text-h2 font-weight-bold pb-10">Chat Timeline</div>
+      <DownloadPopup
+        :chat="chat"
+        data-html2canvas-ignore
+        remove-height-in-html2-canvas
+      />
+      <div class="text-h2 font-weight-bold py-10">Chat Timeline</div>
       <div>Messages per Day</div>
       <Share id="chat-timeline">
         <ChartsLineChart :chartdata="chat" />
@@ -72,11 +76,15 @@
         id="wordcloud"
         :chartdata="chat"
         :min-word-length="30"
-        style="height: 400px; width: 800px"
         class="pa-0 ma-0"
+        style="height: 600px; width: 100%"
       />
 
-      <GlobalFooter class="only-visible-to-html2canvas" />
+      <DownloadPopup
+        :chat="chat"
+        data-html2canvas-ignore
+        remove-height-in-html2-canvas
+      />
     </div>
   </div>
 </template>
